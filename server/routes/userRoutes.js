@@ -1,32 +1,46 @@
 const express = require("express");
+const User = require("../models/usersModel");
 const router = express.Router();
-const User = require('../models/usersModel');
 
 
-const bcrypt = require('bcryptjs');
-const jwt = require("jsonwebtoken");
-const authMiddleware = require('../middlewares/authMiddleware');
 
 
-router.post("/register", async (req, res) => {
-    try {
-  
-      const userExists = await User.findOne({ idNumber: req.body.idNumber });
-      if(userExists){
-        return res.status(200).send({ message: "User already exists", success: false });
-      }
-     const password = req.body.password;
-     const salt = await bcrypt.genSaltSync(10);
-     const hashPassword = await bcrypt.hash(password,salt);
-  
-     req.body.password = hashPassword;
-  
-     const newUser = new User(req.body);
-     await newUser.save();
-  
-     res.status(200).send({message:"user created successfully",success:true})
-    } catch (err) {
-      console.log(error);
-      res.status(500).send({ message: "Error creating user", success: false, error });
+router.post('/register',async(req,res)=>{
+  const {name,email,age,mobile,work,add,desc} = req.body
+
+  if(!name || !email || !age || !mobile || !work || !add || !desc){
+    return res.send({
+      success: false,
+      message: "Please fill all Data",
+    });
+  }
+  try {
+    // check if the user already exists
+    const user = await User.findOne({ email: email });
+    if (user) {
+      return res.send({
+        success: false,
+        message: "User already exists",
+      });
+    }else{
+      const newUser = new User({
+        name,email,age,mobile,work,add,desc
+      });
+      await newUser.save();
+      
+      res.send({
+        success: true,
+        message: "User Registered Successfully",
+      });
+
     }
-  });
+    
+    }catch (error) {
+      res.send({
+        success: false,
+        message: error.message,
+      });
+    }
+})
+
+  module.exports = router

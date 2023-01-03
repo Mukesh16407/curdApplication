@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import {NavLink} from 'react-router-dom'
+
 export const Register = () => {
 
   const [inputVal,setInputVal] = useState({
@@ -20,6 +21,43 @@ export const Register = () => {
       ...preVal,[name]:value
     }
   })
+  }
+
+  const addInputData = async(e)=>{
+       e.preventDefault()
+       const {name,email,age,mobile,work,add,desc} =inputVal;
+       try{
+        const res =  await fetch('api/users/register',{
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+            name,
+            email,
+            age,
+            mobile,
+            work,
+            add,
+            desc
+          })
+         })
+         
+         const data = await res.json();
+          console.log(data);
+          if(!data ){
+            alert("Error");
+            console.log("error")
+          }else{
+            alert("Data Added")
+          }
+
+       }catch(error){
+        console.log(error)
+       }
+       
+
+      
   }
   return (
     <div className="container">
@@ -122,7 +160,7 @@ export const Register = () => {
           />
         </div>
         
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary" onClick={addInputData}>
           Submit
         </button>
         </div>

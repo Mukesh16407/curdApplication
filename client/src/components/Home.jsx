@@ -2,13 +2,14 @@ import React from "react";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { NavLink } from "react-router-dom";
 
 export const Home = () => {
   return (
     <div className="mt-5">
       <div className="container">
         <div className="add_btn mt-2 mb-2">
-          <button className="btn btn-primary">Add Data</button>
+          <NavLink to={'/register'} className="btn btn-primary">Add Data</NavLink>
         </div>
         <table className="table">
           <thead>
