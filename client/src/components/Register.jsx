@@ -1,9 +1,9 @@
 import React from "react";
 import { useState } from "react";
-import {NavLink} from 'react-router-dom'
+import {NavLink, useNavigate} from 'react-router-dom'
 
 export const Register = () => {
-
+  const navigate = useNavigate()
   const [inputVal,setInputVal] = useState({
     name:"",
     email:"",
@@ -45,11 +45,11 @@ export const Register = () => {
          
          const data = await res.json();
           if(res.success){
-            console.log(data)
             alert("Data Added");
           }else{
             alert(data.message);
-            console.log(data.message)
+            navigate('/')
+          
           }
 
        }catch(error){

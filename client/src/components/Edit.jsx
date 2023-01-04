@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import {NavLink} from 'react-router-dom'
+import {NavLink, useNavigate, useParams} from 'react-router-dom'
 
 
 
 export const Edit = () => {
 
+
+  const {id} = useParams("");
+  const navigate = useNavigate()
   const [inputVal,setInputVal] = useState({
     name:"",
     email:"",
@@ -24,6 +27,59 @@ export const Edit = () => {
     }
   })
   }
+  const getSingleData = async()=>{
+    
+    try{
+      const res =  await fetch(`/api/users/getuser/${id}`,{
+        method:"GET",
+       })
+       
+       const data = await res.json();
+       setInputVal(data.data)
+    }catch(error){
+      console.log(error.message)
+    }
+  }
+ useEffect(()=>{
+  getSingleData()
+ },[])
+
+ const updateUser=async(e)=>{
+ e.preventDefault();
+ const {name,email,age,mobile,work,add,desc} =inputVal;
+ try{
+  const res =  await fetch(`/api/users/update/${id}`,{
+    method:"PATCH",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      name,
+      email,
+      age,
+      mobile,
+      work,
+      add,
+      desc
+    })
+   })
+   
+   const data = await res.json();
+    if(res.success){
+      console.log(data)
+      alert("Data Added");
+    }else{
+      alert(data.message);
+      navigate('/')
+      console.log(data.message)
+    }
+
+ }catch(error){
+  console.log(error)
+ }
+ 
+
+ }
   return (
     <div className="container">
       <NavLink to={'/'}>Home</NavLink>
@@ -125,7 +181,7 @@ export const Edit = () => {
           />
         </div>
         
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary" onClick={updateUser}>
           Submit
         </button>
         </div>
