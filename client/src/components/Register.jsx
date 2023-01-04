@@ -44,12 +44,12 @@ export const Register = () => {
          })
          
          const data = await res.json();
-          console.log(data);
-          if(!data ){
-            alert("Error");
-            console.log("error")
+          if(res.success){
+            console.log(data)
+            alert("Data Added");
           }else{
-            alert("Data Added")
+            alert(data.message);
+            console.log(data.message)
           }
 
        }catch(error){

@@ -3,7 +3,7 @@ const User = require("../models/usersModel");
 const router = express.Router();
 
 
-
+//register user
 
 router.post('/register',async(req,res)=>{
   const {name,email,age,mobile,work,add,desc} = req.body
@@ -41,6 +41,50 @@ router.post('/register',async(req,res)=>{
         message: error.message,
       });
     }
+})
+
+//get userData
+
+router.get('/getdata',async(req,res)=>{
+
+  try{
+      const userdata = await User.find();
+      
+      res.send({
+        success:true,
+        message: "User details fetched successfully",
+        data: userdata,
+      })
+  }catch(error){
+    res.send({
+      success: false,
+      message: error.message,
+    });
+  }
+
+})
+
+// get indivisul Data
+
+router.get('/getuser/:id', async(req,res)=>{
+
+  try{
+    
+     const {id} = req.params;
+     const userIndividual =await User.findById({_id:id});
+     res.send({
+      success:true,
+      message: "Get Individual Data",
+      data: userIndividual,
+    })
+    
+     
+  }catch(error){
+    res.send({
+      success: false,
+      message: error.message,
+    });
+  }
 })
 
   module.exports = router
