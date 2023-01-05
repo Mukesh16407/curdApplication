@@ -31,6 +31,7 @@ router.post('/register',async(req,res)=>{
       res.send({
         success: true,
         message: "User Registered Successfully",
+        data:newUser
       });
 
     }
@@ -105,6 +106,25 @@ router.patch('/update/:id', async(req,res)=>{
     res.send({
       success: false,
       message: error.message,
+    });
+  }
+})
+
+//delete user
+router.delete('/deleteuser/:id',async(req,res)=>{
+
+  try{
+    const {id} = req.params;
+    const deleteUser = await User.findByIdAndDelete({_id:id})
+
+    res.send({
+      message: " deleted successfully",
+      success: true,
+    });
+  }catch(error){
+    res.send({
+      error: error.message,
+      success: false,
     });
   }
 })

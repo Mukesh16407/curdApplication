@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
-import {NavLink, useNavigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
+import { addContext } from "../context/ContextProvider";
+
 
 export const Register = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+ const {setUserData} = useContext(addContext)
   const [inputVal,setInputVal] = useState({
     name:"",
     email:"",
@@ -49,6 +52,7 @@ export const Register = () => {
           }else{
             alert(data.message);
             navigate('/')
+            setUserData(data.data)
           
           }
 
@@ -61,7 +65,6 @@ export const Register = () => {
   }
   return (
     <div className="container">
-      <NavLink to={'/'}>Home</NavLink>
       <form className="mt-5">
         <div className="row">
         <div className="mb-3 col-lg-6 col-md-6 col-12" >

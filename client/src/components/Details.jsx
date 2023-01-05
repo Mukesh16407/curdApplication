@@ -7,14 +7,14 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import WorkIcon from '@mui/icons-material/Work';
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
 import PlaceIcon from '@mui/icons-material/Place';
-import { useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 
 export const Details = () => {
 
   const {id} = useParams("");
-
+ const navigate = useNavigate()
   const [singledata,setSingleData] = useState([]);
   
 
@@ -35,7 +35,28 @@ export const Details = () => {
   getSingleData()
  },[])
 
- 
+ const deleteUser= async(id)=>{
+  try{
+    const res2 =  await fetch(`/api/users/deleteuser/${id}`,{
+      method:"DELETE",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      
+     })
+     const deleteData=await res2.json();
+
+     if(!deleteData){
+     console.log("error")
+     }else{
+       alert(deleteData.message);
+       navigate('/')
+     }
+     
+   }catch(error){
+    console.log(error)
+   }
+}
 
   return (
     <div className="container mt-3">
@@ -57,8 +78,8 @@ export const Details = () => {
           </div>
           <div className="right-view col-lg-6 col-md-6 col-12">
           <div className="add-btn">
-            <button className="btn btn-primary mx-2"><ModeEditIcon/></button>
-                <button className="btn btn-danger"><DeleteOutlineIcon/></button>
+            <NavLink to={`/edit/${singledata._id}`}> <button className="btn btn-primary mx-2"><ModeEditIcon/></button></NavLink>
+                <button className="btn btn-danger" onClick={()=>deleteUser(singledata._id)}><DeleteOutlineIcon/></button>
             </div>
           <p className="mt-5"><SmartphoneIcon/>Phone:<span>{singledata.mobile}</span></p>
           <p className="mt-3"><PlaceIcon/>Place:<span>{singledata.add}</span></p>

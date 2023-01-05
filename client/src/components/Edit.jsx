@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
-import {NavLink, useNavigate, useParams} from 'react-router-dom'
+import { useNavigate, useParams} from 'react-router-dom'
+import { updateContext } from "../context/ContextProvider";
 
 
 
@@ -8,7 +9,8 @@ export const Edit = () => {
 
 
   const {id} = useParams("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { setUpdate} = useContext(updateContext)
   const [inputVal,setInputVal] = useState({
     name:"",
     email:"",
@@ -35,7 +37,8 @@ export const Edit = () => {
        })
        
        const data = await res.json();
-       setInputVal(data.data)
+       setInputVal(data.data);
+       setUpdate(data.data)
     }catch(error){
       console.log(error.message)
     }
@@ -82,7 +85,6 @@ export const Edit = () => {
  }
   return (
     <div className="container">
-      <NavLink to={'/'}>Home</NavLink>
       <form className="mt-5">
         <div className="row">
         <div className="mb-3 col-lg-6 col-md-6 col-12" >
